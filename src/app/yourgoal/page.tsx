@@ -1,7 +1,7 @@
 import CalorieCalculator from '@/components/component/goalForm'
 import React from 'react'
 
-export function GoalForm() {
+ function GoalForm() {
   return (
     <CalorieCalculator/>
   )
