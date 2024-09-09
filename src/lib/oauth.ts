@@ -14,6 +14,7 @@ export const fetchFoodData = async (searchExpression: string) => {
     format:"json",
     oauth_consumer_key: consumerKey,
     oauth_nonce: Math.random().toString(36).substr(2),
+    oauth_signature:"",
     oauth_signature_method: 'HMAC-SHA1',
     oauth_timestamp: Math.floor(new Date().getTime() / 1000).toString(),
     oauth_version: '1.0',
@@ -32,10 +33,12 @@ type paramsObj ={
 
   // Construct the parameter string
   const paramsStr = Object.keys(reqObj)
-    .sort()
-    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(reqObj[key])}`)
-    .join('&');
-
+  .sort()
+  .map(key => {
+    const typedKey = key as keyof typeof reqObj; // Ensures `key` is a valid key
+    return `${encodeURIComponent(typedKey)}=${encodeURIComponent(reqObj[typedKey].toString())}`;
+  })
+  .join('&');
   // Create the signature base string
   const sigBaseStr = `POST&${encodeURIComponent(fatSecretRestUrl)}&${encodeURIComponent(paramsStr)}`;
 
