@@ -8,9 +8,8 @@ import { extractNutrientValue } from '@/lib/utils';
 import Loader from './loader/loader';
 
 type Category = 'Breakfast' | 'MorningSnack' | 'Lunch' | 'EveningSnack' | 'Dinner';
-export interface Item {
+export interface UserItem {
   itemName: string;
-  food_description: string;
   foodMacros: {
     calories: number;
     protein: number;
@@ -19,16 +18,16 @@ export interface Item {
   };
   quantity: number;
   totalMacros: {
-    calories: number;
-    protein: number;
-    carbs: number;
-    fat: number;
+    totalCalories: number;
+   totalProtein: number;
+    totalCarbs: number;
+    totalFat: number;
   };
 }
 interface FoodSearchPopupProps {
   category:Category;
   onClose: () => void;
-  onSelectItem: (category: Category, item: Item) => void;
+  onSelectItem: (category: Category, item: UserItem) => void;
 
 }
 interface foodInfo{

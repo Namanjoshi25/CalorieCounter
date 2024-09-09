@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import FoodSearchPopup from '@/components/component/searchFood';
+import FoodSearchPopup, { UserItem } from '@/components/component/searchFood';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {format} from 'date-fns'
@@ -38,9 +38,9 @@ const TrackFoodPage: React.FC = () => {
   interface Item {
     itemName: string;
     food_description: string;
-    foodMacros: FoodMacros;
+    foodMacros: FoodMacros ;
     quantity: number;
-    totalMacros: FoodMacros;
+    totalMacros: TotalFoodMacros;
   }
   
   // Define the type for selectedItems where each category has an array of items
@@ -85,7 +85,7 @@ const TrackFoodPage: React.FC = () => {
     setSelectedCategory(null);
   };
 
-  const handleSelectItem = (category:Category, item: Item) => {
+  const handleSelectItem = (category:Category, item: UserItem) => {
     if(item.itemName &&  item.quantity){
     setSelectedItems((prev) => ({
       ...prev,
@@ -142,7 +142,7 @@ const TrackFoodPage: React.FC = () => {
   }
 
  useEffect(() => {
-    const calculateTotalMacros = (items ) => {
+    const calculateTotalMacros = (items :SelectedItemsSubType ) => {
       return items.reduce((acc, item) => {
         return {
           totalCalories: acc.totalCalories + item.totalMacros.totalCalories,
