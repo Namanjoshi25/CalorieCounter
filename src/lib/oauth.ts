@@ -9,34 +9,36 @@ export const fetchFoodData = async (searchExpression: string) => {
   const consumerSecret = process.env.CLIENT_SECRET || '';
   const fatSecretRestUrl = 'https://platform.fatsecret.com/rest/server.api';
 
-  const reqObj = {
+
+type paramsObj ={
+    method: string,
+    format:string,
+    oauth_consumer_key: string,
+    oauth_nonce: string,
+    oauth_signature_method: string,
+    oauth_timestamp: string,
+    oauth_version: string,
+    search_expression: string,
+    oauth_signature?: string; 
+  };
+  const reqObj :paramsObj = {
     method: 'foods.search',
     format:"json",
     oauth_consumer_key: consumerKey,
     oauth_nonce: Math.random().toString(36).substr(2),
-    oauth_signature:"",
     oauth_signature_method: 'HMAC-SHA1',
     oauth_timestamp: Math.floor(new Date().getTime() / 1000).toString(),
     oauth_version: '1.0',
     search_expression: searchExpression,
   };
   
-type paramsObj ={
-    method: string,
-    oauth_consumer_key: string,
-    oauth_nonce: number,
-    oauth_signature_method: string,
-    oauth_timestamp: number,
-    oauth_version: string,
-    search_expression: string,
-  };
 
   // Construct the parameter string
   const paramsStr = Object.keys(reqObj)
   .sort()
   .map(key => {
     const typedKey = key as keyof typeof reqObj; // Ensures `key` is a valid key
-    return `${encodeURIComponent(typedKey)}=${encodeURIComponent(reqObj[typedKey].toString())}`;
+    return `${encodeURIComponent(typedKey)}=${encodeURIComponent(reqObj[typedKey!]!.toString())}`;
   })
   .join('&');
   // Create the signature base string
