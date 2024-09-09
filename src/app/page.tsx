@@ -17,14 +17,14 @@ export default function Home() {
     totalCalories: number;
     totalProtein: number;
     totalCarbs: number;
-    totalFat: number;
+    totalFats: number;
   }
 
    const [userGoal, setUserGoal] = useState<TotalFoodMacros>({
     totalCalories: 0,
     totalProtein: 0,
     totalCarbs: 0,
-    totalFat: 0
+    totalFats: 0
    });
    
    
