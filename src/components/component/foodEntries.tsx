@@ -6,7 +6,7 @@ import { useEffect } from "react"
 
 
 
-export default function FoodEntries(userId : object){
+export default function FoodEntries(userId : any){
 const user = userId.userId
     useEffect(()=>{
         async function fetchFoodEntries(){

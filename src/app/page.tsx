@@ -12,9 +12,20 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
 
-  const userId = useAppSelector<IUserInfo>(state=>state.auth.userInfo._id  )
+  const userId = useAppSelector(state=>state.auth.userInfo?._id  )
+  interface TotalFoodMacros {
+    totalCalories: number;
+    totalProtein: number;
+    totalCarbs: number;
+    totalFat: number;
+  }
 
-   const [userGoal, setUserGoal] = useState({});
+   const [userGoal, setUserGoal] = useState<TotalFoodMacros>({
+    totalCalories: 0,
+    totalProtein: 0,
+    totalCarbs: 0,
+    totalFat: 0
+   });
    
    
   useEffect(()=>{

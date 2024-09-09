@@ -11,21 +11,35 @@ import { useRouter } from "next/navigation";
 
 
 // Define the Zod schema for form validation
+
+
 const schema = z.object({
   age: z.string().min(1, "Age is required"),
-  sex: z.enum(["male", "female"], "Select your gender"),
+  sex: z.enum(["male", "female"]).refine(value => ["male", "female"].includes(value), {
+    message: "Select your gender",
+  }),
   height: z.string(),
   weight: z.string(),
-  goal: z.enum(["maintain", "lose", "gain"], "Select your goal"),
+  goal: z.enum(["maintain", "lose", "gain"]).refine(value => ["maintain", "lose", "gain"].includes(value), {
+    message: "Select your goal",
+  }),
   activityLevel: z.enum([
     "sedentary",
     "light",
     "moderate",
     "veryActive",
     "extraActive"
-  ], "Select your activity level"),
-
+  ]).refine(value => [
+    "sedentary",
+    "light",
+    "moderate",
+    "veryActive",
+    "extraActive"
+  ].includes(value), {
+    message: "Select your activity level",
+  }),
 });
+
 
 type FormData = z.infer<typeof schema>;
 
@@ -42,7 +56,7 @@ const userData = useAppSelector(state => state.auth.userInfo)
     const totalCalories  =calculateCalories(data);
     const macros = calculateMacros(totalCalories);
 
-    const res =   await storeUserGoal(totalCalories, macros,userData._id)
+    const res =   await storeUserGoal(totalCalories, macros,userData!._id)
     if(res){
       router.push("/")
     }

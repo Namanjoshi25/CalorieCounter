@@ -12,10 +12,18 @@ import DateSlider from "./dateSlider"
 import { getRecentMeals } from "@/Action/searchFood.action"
 import FoodEntries from "./foodEntries"
 import CaloriesGraph from "./nutritionGraph"
+interface TotalFoodMacros {
+  totalCalories: number;
+  totalProtein: number;
+  totalCarbs: number;
+  totalFats: number;
+}
+interface ComponentProps {
+  userGoal: TotalFoodMacros;
+}
 
-
-export function Component({userGoal}) {
-  const userId = useAppSelector(state => state.auth.userInfo._id)
+export function Component({userGoal} : ComponentProps) {
+  const userId = useAppSelector(state => state.auth.userInfo?._id)
   const [date, setDate] = useState<Date> ( new Date());
   const [dates, setDates] = useState<Date[]>([]);
 const [dateLimit,setDateLimit] = useState(7)
@@ -28,6 +36,7 @@ const [dateLimit,setDateLimit] = useState(7)
     totalFat:0 ,
   })
    
+ 
 
   function getProgress(){
     if(userMacros){
@@ -209,7 +218,7 @@ const [dateLimit,setDateLimit] = useState(7)
             </CardFooter>
           </Card>
         </div>
-        <CaloriesGraph userId={userId} goalCalories={userGoal.totalCalories} />
+        <CaloriesGraph userId={userId!} goalCalories={userGoal.totalCalories} />
         
       </main>
     </div>

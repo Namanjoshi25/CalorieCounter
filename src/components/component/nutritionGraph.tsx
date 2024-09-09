@@ -8,7 +8,7 @@ import { fetchWeeklyMeals, getRecentMeals } from '@/Action/searchFood.action';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 interface Props {
-  userId: string;
+  userId: string | null;
   goalCalories: number;
 }
 
@@ -20,7 +20,7 @@ const CaloriesGraph: React.FC<Props> = ({ userId, goalCalories }) => {
 
   useEffect(() => {
     async function fetchData() {
-      const data = await fetchWeeklyMeals(userId);
+      const data = await fetchWeeklyMeals(userId!);
       console.log(data);
        setWeeklyData(data); 
     }

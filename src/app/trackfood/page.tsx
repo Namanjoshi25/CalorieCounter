@@ -14,7 +14,7 @@ import DateSlider from '@/components/component/dateSlider';
 const TrackFoodPage: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const userId = useAppSelector<IUserInfo>(state => state.auth.userInfo._id)
+  const userId = useAppSelector(state => state.auth.userInfo?._id)
   const [date, setDate] = useState<Date> ( new Date(new Date().toLocaleDateString()));
   const [dates, setDates] = useState<Date[]>([]);
   const [dateLimit,setDateLimit] = useState(3)
@@ -28,7 +28,7 @@ const TrackFoodPage: React.FC = () => {
     carbs: number;
     fat: number;
   }
-  interface TotalFoodMacros {
+   interface TotalFoodMacros {
     totalCalories: number;
     totalProtein: number;
     totalCarbs: number;

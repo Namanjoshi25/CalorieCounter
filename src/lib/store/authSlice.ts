@@ -11,26 +11,26 @@ export interface IUserInfo {
   
   // Define the interface for the auth state
   export interface IAuthState {
-    authState: boolean;
-    userInfo: IUserInfo; // Assuming userInfo is an object now
+    authStatus: boolean;
+    userInfo: IUserInfo | null // Assuming userInfo is an object now
   }
-  const initialState = {
+  const initialState: IAuthState = {
     authStatus: false,
-    userInfo : {}
+    userInfo : null
   }
 
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<IAuthState>) => {
-      console.log(action.payload);
+    login: (state, action: PayloadAction<IUserInfo>) => {
+  
       state.authStatus = true;
       state.userInfo = action.payload
     },
     logout : (state )=>{
         state.authStatus = false,
-        state.userInfo = {}
+        state.userInfo = null
     }
   },
 });
