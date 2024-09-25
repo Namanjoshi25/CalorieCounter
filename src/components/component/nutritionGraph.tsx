@@ -21,7 +21,6 @@ const CaloriesGraph: React.FC<Props> = ({ userId, goalCalories }) => {
   useEffect(() => {
     async function fetchData() {
       const data = await fetchWeeklyMeals(userId!);
-      console.log(data);
        setWeeklyData(data); 
     }
 

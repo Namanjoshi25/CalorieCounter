@@ -7,7 +7,7 @@ connect();
 // Function to get recent entries for a user
 export async function getRecentMeals(userId : string, limit = 7) {
   try {
-    const recentMeals = await UserNutrition.find({ userId }).sort({ date: 1 }) // Sort by the most recent date
+    const recentMeals = await UserNutrition.find({ userId }).sort({ date: -1 }) // Sort by the most recent date
     .limit(limit);    // Limit the number of results
 
     return recentMeals;
@@ -22,7 +22,8 @@ export async function getRecentMeals(userId : string, limit = 7) {
 export const fetchWeeklyMeals = async (userId: string) => {
   const weeklyMeals = await getRecentMeals(userId);
 
-   const dataForGraph = weeklyMeals.map(meal => ({
+
+   const dataForGraph = weeklyMeals.reverse().map(meal => ({
     date: new Date(meal.date).toLocaleDateString(),
     totalCalories: meal.totalCalories,
   })); 

@@ -129,9 +129,9 @@ const TrackFoodPage: React.FC = () => {
 
 
     if(saveMeal && saveMealNutrition){ 
-      const logDate= format(new Date() , "MM/dd/yy")
+      
     
-      const userLog = await axios.post(`/api/users/streak?user=${userId}&date=${logDate}`)
+      const userLog = await axios.post(`/api/users/streak?user=${userId}`)
       if(userLog)  router.push("/")
       
       
@@ -243,6 +243,7 @@ const TrackFoodPage: React.FC = () => {
   };
 
   const fetchDataForDate = async (date: Date) => {
+
     setDate(date);
     // Fetch data logic here based on the selected date
   };

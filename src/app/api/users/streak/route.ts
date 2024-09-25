@@ -7,89 +7,72 @@ connect();
 
 export async function  POST(request : NextRequest){
   try {
+  
+
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('user');
-    const date=  searchParams.get('date');
-    if (!userId || !date) {
+  
+
+    if (!userId ) {
       return NextResponse.json({ message: "userId or date is not provided" }, { status: 400 });
     }
-    const userLog = await UserStreak.findOne({userId, date});
-    if(userLog) return NextResponse.json({message: "User Log updated"} , {status:200})
 
-      const newLog = new UserStreak({
-       userId  :  userId,
-       lastMealLogged : date
-      })
+    // Find the existing log for the user on the same date
+    const userLog = await UserStreak.findOne({ userId });
 
-      const savedLog= await newLog.save();
-      return NextResponse.json({message: "User Log added" , savedLog},{status:200})
+    const logDate = new Date(); // The incoming log date
+    const lastLogDate = new Date(userLog?.lastMealLogged);
+
+    // Check if the user log exists for the provided date and update streak
+    if (userLog) {
+      const differenceInTime = logDate.getTime() - lastLogDate.getTime(); 
+      const diffInDays = differenceInTime / (1000 * 3600 * 24);
+      if (diffInDays === 1) {
+        userLog.streak += 1;
+        userLog.lastMealLogged = logDate;
+        await userLog.save();
+        return NextResponse.json({ message: "Streak updated", streak: userLog.streak }, { status: 200 });
+      } else if (diffInDays > 1) {
+        userLog.streak = 1; // Reset streak since more than 1 day has passed
+        userLog.lastMealLogged = logDate;
+        await userLog.save();
+        return NextResponse.json({ message: "Streak reset", streak: userLog.streak }, { status: 200 });
+      } else {
+        return NextResponse.json({ message: "Invalid log date. Cannot log for the past." }, { status: 200 });
+      }
+    }
+
+    // If no log exists for the user, create a new one
+    const newLog = new UserStreak({
+      userId: userId,
+      lastMealLogged: logDate,
+      streak: 1,
+    });
+
+    const savedLog = await newLog.save();
+    return NextResponse.json({ message: "User Log added", savedLog }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({message : "Failed to add to user logs"} , {status:500})
+    return NextResponse.json({ message: "Failed to add to user logs", error }, { status: 200 });
   }
 }
 export async function GET(request :NextRequest ){
     try {
-        const { searchParams } = new URL(request.url);
-        const userId = searchParams.get('user');
-        
-        if (!userId) {
-          return NextResponse.json({ message: "userId is not provided" }, { status: 400 });
-        }
-    
-         const streak = await calculateStreak(userId) + 1 ;
+      const { searchParams } = new URL(request.url);
+      const userId = searchParams.get('user');
+      const streakData = await UserStreak.findOne({ userId });
 
+      if (!streakData) {
+        return NextResponse.json({message : "Track food for mantaining the streak"},{status :200})
+      }
 
-
-        
         // Calculate and return 
-        return NextResponse.json({ message: "Food data logged", streak  }, { status: 200 });
+        return NextResponse.json({ message: "Food data logged", streak :  streakData.streak }, { status: 200 });
       } catch (error) {
         console.error("Error while logging food data:", error);
         return NextResponse.json({ message: "Error while logging food data" }, { status: 500 });
       }
+    
 }
-async function calculateStreak(userId :string) {
+
   
-    const today = format(new Date(),"MM/dd/yy");
-    const formattedToday = format(today,"MM/dd/yy"); // YY-MM-DD
-  
-    // Fetch meals logged by the user in the last 7 days (up to today)
-    const lastWeekMeals = await UserStreak.find({
-      userId,
-      date: { $lte: today } // Fetch logs only up to today
-    }).sort({ date: -1 });  // Sort by date, most recent first
-  
-    let streak = 0;
-    let currentDate = new Date(); // Start from today
-  
-    // Loop through up to 7 days and check if meals exist for each consecutive day
-    for (let i = 0; i < 7; i++) {
-      const dateToCheck = new Date(currentDate);
-      dateToCheck.setDate(currentDate.getDate() - i);
-  
-      // Find a meal for the specific date
-      const mealForDay = lastWeekMeals.find(meal => {
-        const mealDate = new Date(meal.date);
-        return mealDate.toDateString() === dateToCheck.toDateString();
-      });
-  
-      if (mealForDay) {
-        streak++; // Increment streak if a meal exists for this day
-      } else {
-        break; // Break the loop if no meal is found, ending the streak
-      }
-    }
-  
-    return streak;
-  };
-  
-  
-  function isOneDayBefore(date1 : any, date2 :any) {
-    const oneDay = 24 * 60 * 60 * 1000; // Milliseconds in one day
-    return Math.abs(date1 - date2) === oneDay;
-  }
-  
-   function isSameDay(date1 :Date, date2 :Date) {
-    return date1.toDateString() === date2.toDateString();
-  } 
   

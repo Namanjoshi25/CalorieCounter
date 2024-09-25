@@ -147,7 +147,7 @@ const [dateLimit,setDateLimit] = useState(7)
             <CardFooter>
               <div className="flex items-center justify-between">
                 <div className="text-sm text-muted-foreground font-bold">Goal:{userGoal.totalCalories}</div>
-                <div className="text-sm text-muted-foreground">| {userGoal.totalCalories - userMacros.totalCalories} left</div>
+                <div className="text-sm text-muted-foreground">| {Math.round(userGoal.totalCalories - userMacros.totalCalories)} left</div>
               </div>
             </CardFooter>
           </Card>
@@ -161,7 +161,7 @@ const [dateLimit,setDateLimit] = useState(7)
             <CardFooter>
               <div className="flex items-center justify-between">
                 <div className="text-sm text-muted-foreground font-bold">Goal: {userGoal.totalProtein}</div>
-                <div className="text-sm text-muted-foreground">| {userGoal.totalProtein - userMacros.totalProtein}g left</div>
+                <div className="text-sm text-muted-foreground">| {Math.round(userGoal.totalProtein - userMacros.totalProtein)}g left</div>
               </div>
             </CardFooter>
           </Card>
@@ -175,7 +175,7 @@ const [dateLimit,setDateLimit] = useState(7)
             <CardFooter>
               <div className="flex items-center justify-between">
                 <div className="text-sm text-muted-foreground font-bold">Goal: {userGoal.totalCarbs} </div>
-                <div className="text-sm text-muted-foreground"> | {userGoal.totalCarbs - userMacros.totalCarbs}g left</div>
+                <div className="text-sm text-muted-foreground"> | {Math.round(userGoal.totalCarbs - userMacros.totalCarbs)}g left</div>
               </div>
             </CardFooter>
           </Card>
@@ -191,7 +191,7 @@ const [dateLimit,setDateLimit] = useState(7)
             <CardFooter>
               <div className="flex items-center justify-between">
                 <div className="text-sm text-muted-foreground font-bold">Goal: {userGoal.totalFats}</div>
-                <div className="text-sm text-muted-foreground">| {userGoal.totalFats - userMacros.totalFat}g left</div>
+                <div className="text-sm text-muted-foreground">| {Math.round(userGoal.totalFats - userMacros.totalFat)}g left</div>
               </div>
             </CardFooter>
           </Card>

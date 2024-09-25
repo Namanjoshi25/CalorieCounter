@@ -8,6 +8,10 @@ const streakSchema = new  Schema({
  lastMealLogged : {
     type : Date,
     required : true
+ },
+ streak : {
+   type : Number ,
+   default : 0
  }
 })
 

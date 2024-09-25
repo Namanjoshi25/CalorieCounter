@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ message: "userId or date is not provided" }, { status: 400 });
         }
     
-        console.log(date);
+  
     
         const userMacros = await UserNutrition.findOne({ userId, date });
  
