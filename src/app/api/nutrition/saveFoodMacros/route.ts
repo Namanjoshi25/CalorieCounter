@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import UserNutrition from '@/models/userNutrition.model';
 import { connect } from "@/dbConfig/dbConfig";
-
+import { startOfDay, endOfDay } from 'date-fns';
 connect();
 
 export async function POST(request: NextRequest) {
@@ -55,7 +55,13 @@ export async function GET(request : NextRequest){
           return NextResponse.json({ message: "userId or date is not provided" }, { status: 400 });
         }
 
-        const userNutrition = await UserNutrition.findOne({ userId, date }).select(" -_id -userId");
+        const targetDate = new Date(date);
+    const startDate = startOfDay(targetDate);  // 00:00:00
+    const endDate = endOfDay(targetDate); 
+    const userNutrition = await UserNutrition.findOne({
+      userId,
+      date: { $gte: startDate, $lt: endDate }   // Match the entire day
+    }).select("-_id -userId");
     
         if (!userNutrition) {
 

@@ -28,6 +28,7 @@ export const config = {
     "/trackfood",
     '/login',
     '/signup',
+    '/yourgoal'
     
   ]
 }

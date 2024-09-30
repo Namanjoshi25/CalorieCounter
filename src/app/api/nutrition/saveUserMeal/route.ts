@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import UserMeal from '@/models/userMeal.model'
 import { connect } from "@/dbConfig/dbConfig";
+import { endOfDay, startOfDay } from "date-fns";
 
 connect()
 export async function POST (request :NextRequest){
@@ -61,9 +62,11 @@ export async function GET(request : NextRequest){
           return NextResponse.json({ message: "userId or date is not provided" }, { status: 400 });
         }
     
+        const targetDate = new Date(date);
+        const startDate = startOfDay(targetDate);  // 00:00:00
+        const endDate = endOfDay(targetDate); 
     
-    
-        const userMeal = await UserMeal.findOne({ userId, date }).select(" -_id -userId");
+        const userMeal = await UserMeal.findOne({ userId, date: { $gte: startDate, $lt: endDate }}).select(" -_id -userId");
     
         if (!userMeal) {
 
